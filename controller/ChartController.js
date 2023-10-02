@@ -1,5 +1,6 @@
 import {charts} from "../model/Chart.js";
 
+
 export function getCharts() {
     return charts;
 }
