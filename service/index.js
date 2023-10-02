@@ -93,22 +93,6 @@ app.get('/charts', (req, res) => {
     res.status(200).send(getCharts(type));
 });
 
-/**
- * @swagger
- * /allCharts:
- *   get:
- *     summary: Retrieve all charts
- *     responses:
- *       200:
- *         description: A JSON array of all charts
- */
-app.get('/allCharts', (req, res) => {
-    const type = req.query.type;
-    const response = getAllCharts(type);
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(response);
-});
-
 app.post = function (path, callback) {
     return this.put(path, callback);
 
@@ -133,6 +117,7 @@ app.post = function (path, callback) {
  *       404:
  *         description: Failed to create chart
  */
+
 app.post('/chart', (req, res) => {
     const chart = req.body;
     const response = createChart(chart);

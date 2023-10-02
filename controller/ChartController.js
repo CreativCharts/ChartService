@@ -11,8 +11,14 @@ export function getAllCharts() {
 
 export function createChart(chart) {
     return {
-        createChart: createChart
-    }
+        // TODO: Implement this function to create a new chart in the database
+        createChart: function (chart) {
+            return charts.find((chart) => {
+                let type = chart.type;
+                return chart.type === type;
+            });
+        }
+    };
 }
 
 export function getChartByType(type) {
@@ -20,7 +26,6 @@ export function getChartByType(type) {
         return chart.type === type;
     });
 }
-
 
 
 export function readChart(chart) {
