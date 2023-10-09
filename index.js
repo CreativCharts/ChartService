@@ -5,8 +5,7 @@ import {
     getCharts,
     getChartByType,
     createChart
-} from "../controller/ChartController.js";
-import {charts} from "../model/Chart.js";
+} from "./controller/ChartController.js";
 
 // Swagger definition
 const swaggerDefinition = {
@@ -27,7 +26,7 @@ const swaggerDefinition = {
 const options = {
     swaggerDefinition,
     // Path to the API docs
-    apis: ['./**/*.js'],
+    apis: ['./index.js', './service/**/*.js'],
 };
 
 // Initialize swagger-jsdoc -> returns validated swagger spec in json format
