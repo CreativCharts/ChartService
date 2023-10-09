@@ -2,11 +2,11 @@ import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import {
-    getAllCharts,
     getCharts,
     getChartByType,
     createChart
 } from "../controller/ChartController.js";
+import {charts} from "../model/Chart.js";
 
 // Swagger definition
 const swaggerDefinition = {
@@ -93,13 +93,10 @@ app.get('/charts', (req, res) => {
     res.status(200).send(getCharts(type));
 });
 
-app.post = function (path, callback) {
-    return this.put(path, callback);
 
-};
 /**
  * @swagger
- * /chart:
+ * /createchart:
  *   post:
  *     summary: Create a new chart
  *     requestBody:
@@ -118,10 +115,8 @@ app.post = function (path, callback) {
  *         description: Failed to create chart
  */
 
-app.post('/chart', (req, res) => {
-    const chart = req.body;
-    const response = createChart(chart);
-
+app.post('/createchart', (req, res) => {
+    const response = createChart(req.body);
     if (response == null) {
         res.status(404);
     } else {
