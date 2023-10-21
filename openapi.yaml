@@ -1,0 +1,57 @@
+openapi: 3.0.0
+info:
+  title: Chart Service API
+  version: 1.0.0
+  description: APIs for Chart Service
+servers:
+  - url: http://localhost:3001
+paths:
+  /:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: ChartService is up and running!
+  /chart:
+    get:
+      summary: Retrieve a chart by type
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+          description: The chart type
+      responses:
+        '200':
+          description: A JSON object of chart data
+        '404':
+          description: Chart not found
+    post:
+      summary: Create a new chart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+      responses:
+        '200':
+          description: A JSON object of the created chart
+        '404':
+          description: Failed to create chart
+  /charts:
+    get:
+      summary: Retrieve charts
+      responses:
+        '200':
+          description: A JSON array of charts
+components:
+  schemas:
+    Chart:
+      type: object
+      properties:
+        title:
+          type: string

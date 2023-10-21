@@ -39,7 +39,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 /**
  * @swagger
- * /:
+ * /api-docs/#/default:
  *   get:
  *     summary: Health check
  *     responses:

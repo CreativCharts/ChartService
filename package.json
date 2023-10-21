@@ -10,6 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.7.0",
     "express": "latest",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.0"
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/CreativCharts/ChartService/issues"
   },
-  "homepage": "https://github.com/CreativCharts/ChartService#readme"
+  "homepage": "https://github.com/CreativCharts/ChartService#readme",
+  "devDependencies": {
+    "eslint": "^8.51.0"
+  }
 }
