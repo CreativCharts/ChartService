@@ -1,51 +1,47 @@
-import {charts} from "../model/Chart.js";
+import ChartModel from "../model/Chart.js";
 
-
-export function getCharts() {
-    return charts;
+export async function allCharts() {
+    try {
+        return await ChartModel.find();
+    } catch (error) {
+        console.error("Error in getAllCharts:", error);
+        throw error;
+    }
 }
 
-export function getAllCharts() {
-    return charts;
-}
+export async function createChart(chart) {
+    if (!chart.type) {
+        throw new Error("Missing required field: type");
+    }
 
-export function createChart(chart) {
-    return {
-        // TODO: Implement this function to create a new chart in the database
-        createChart: function (chart) {
-            return charts.find((chart) => {
-                let type = chart.type;
-                return chart.type === type;
-            });
-        }
-    };
-}
-
-export function getChartByType(type) {
-    return charts.find((chart) => {
-        return chart.type === type;
+    const newChart = new ChartModel({
+        type: chart.type,
+        data: chart.data,
+        gridData: chart.gridData
     });
+
+    try {
+        await newChart.save();
+        return newChart;
+    } catch (error) {
+        throw error;
+    }
 }
-
-
-export function readChart(chart) {
-    return charts.find((chart) => {
-        let type = chart.type;
-        return chart.type === type;
-    });
-}
-
 
 export function updateChart(chart) {
-    return charts.find((chart) => {
+    return ChartModel.find((chart) => {
         let type = chart.type;
         return chart.type === type;
     });
 }
 
 export function deleteChart(chart) {
-    return charts.find((chart) => {
+    return ChartModel.find((chart) => {
         let type = chart.type;
         return chart.type === type;
     });
+}
+
+export function getChart() {
+    return ChartModel.find();
 }

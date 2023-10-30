@@ -1,23 +1,22 @@
-function Chart(data, type) {
-    this.data = data;
-    this.type = type;
-}
+// Chart.js
+import mongoose from 'mongoose';
 
-export const charts = [
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Line"),
+const GridCellSchema = new mongoose.Schema({
+    type: { type: String },
+    text: { type: String, default: '' },
+    className: { type: String, default: '' }
+});
 
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Pie"),
+const GridRowSchema = new mongoose.Schema({
+    rowId: { type: String },
+    cells: { type: [GridCellSchema], default: [] }
+});
 
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Bar"),
+const ChartSchema = new mongoose.Schema({
+    data: { type: String, default: '' },
+    type: { type: String },
+    gridData: { type: [GridRowSchema], default: [] }
+});
 
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Doughnut"),
-
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Radar"),
-
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "PolarArea"),
-
-    new Chart("Montag, Dienstag, Mittwoch, Donnerstag, Freitag, Samstag, Sonntag", "Bubble"),
-
-    new Chart("Europe, Asia, Africa, Northamerica, Southamerica, Australia, Antarctica", "GeoMap"),
-
-];
+const ChartModel = mongoose.model('Chart', ChartSchema);
+export default ChartModel;

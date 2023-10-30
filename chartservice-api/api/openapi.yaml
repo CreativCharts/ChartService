@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+  description: APIs for Chart Service
+  title: Chart Service API
+  version: 1.0.0
+servers:
+- url: http://localhost:3001
+paths:
+  /:
+    get:
+      operationId: rootGET
+      responses:
+        "200":
+          description: ChartService is up and running!
+      summary: Health check
+      x-eov-operation-handler: controllers/DefaultController
+  /chart:
+    get:
+      operationId: chartGET
+      parameters:
+      - description: The chart type
+        explode: true
+        in: query
+        name: type
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          description: A JSON object of chart data
+        "404":
+          description: Chart not found
+      summary: Retrieve a chart by type
+      x-eov-operation-handler: controllers/DefaultController
+    post:
+      operationId: chartPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/_chart_post_request'
+        required: true
+      responses:
+        "200":
+          description: A JSON object of the created chart
+        "404":
+          description: Failed to create chart
+      summary: Create a new chart
+      x-eov-operation-handler: controllers/DefaultController
+  /charts:
+    get:
+      operationId: chartsGET
+      responses:
+        "200":
+          description: A JSON array of charts
+      summary: Retrieve charts
+      x-eov-operation-handler: controllers/DefaultController
+components:
+  schemas:
+    Chart:
+      properties:
+        title:
+          type: string
+      type: object
+    _chart_post_request:
+      properties:
+        title:
+          type: string
+      type: object

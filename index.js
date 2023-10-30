@@ -1,126 +1,37 @@
 import express from 'express';
-import swaggerJsdoc from 'swagger-jsdoc';
-import swaggerUi from 'swagger-ui-express';
-import {
-    getCharts,
-    getChartByType,
-    createChart
-} from "./controller/ChartController.js";
-
-// Swagger definition
-const swaggerDefinition = {
-    openapi: '3.0.0',
-    info: {
-        title: 'Chart Service API',
-        version: '1.0.0',
-        description: 'APIs for Chart Service',
-    },
-    servers: [
-        {
-            url: 'http://localhost:3001',
-        },
-    ],
-};
-
-// Options for the swagger docs
-const options = {
-    swaggerDefinition,
-    // Path to the API docs
-    apis: ['./index.js', './service/**/*.js'],
-};
-
-// Initialize swagger-jsdoc -> returns validated swagger spec in json format
-const swaggerSpec = swaggerJsdoc(options);
+import {createChart, allCharts} from "./controller/ChartController.js";
+import {initializeDatabase} from "./dbConnect/database.js";
 
 const app = express();
 const port = 3001;
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use(express.json());
 
-/**
- * @swagger
- * /api-docs/#/default:
- *   get:
- *     summary: Health check
- *     responses:
- *       200:
- *         description: ChartService is up and running!
- */
-app.get('/', (req, res) => res.send('ChartService is up and running!'));
+initializeDatabase();
 
-/**
- * @swagger
- * /chart:
- *   get:
- *     summary: Retrieve a chart by type
- *     parameters:
- *       - in: query
- *         name: type
- *         schema:
- *           type: string
- *         description: The chart type
- *     responses:
- *       200:
- *         description: A JSON object of chart data
- *       404:
- *         description: Chart not found
- */
-app.get('/chart', (req, res) => {
-    const type = req.query.type;
-    const response = getChartByType(type);
+app.get('/dashboard', (req, res) => res.send('ChartService is up and running!'));
 
-    if (response == null) {
-        res.status(404);
-    } else {
-        res.setHeader('Content-Type', 'application/json');
-        res.status(200).send(response);
+app.get('/dashboard/allCharts', async (
+    req,
+    res) => {
+    try {
+        const charts = await allCharts();
+        res.status(200).json(charts);
+    } catch (error) {
+        console.error("Error fetching all charts:", error);
+        res.status(500).send('Internal Server Error');
     }
 });
 
-/**
- * @swagger
- * /charts:
- *   get:
- *     summary: Retrieve charts
- *     responses:
- *       200:
- *         description: A JSON array of charts
- */
-app.get('/charts', (req, res) => {
-    let type = req.type;
-    res.setHeader('Content-Type', 'application/json');
-    res.status(200).send(getCharts(type));
-});
-
-
-/**
- * @swagger
- * /createchart:
- *   post:
- *     summary: Create a new chart
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *     responses:
- *       200:
- *         description: A JSON object of the created chart
- *       404:
- *         description: Failed to create chart
- */
-
-app.post('/createchart', (req, res) => {
-    const response = createChart(req.body);
-    if (response == null) {
-        res.status(404);
-    } else {
+app.post('/dashboard/create-chart', async (req, res) => {
+    const chart = req.body;
+    try {
+        const response = await createChart(chart);  // `createChart` sollte asynchron sein, da es eine Datenbankoperation ausführt
         res.setHeader('Content-Type', 'application/json');
         res.status(200).send(response);
+    } catch (error) {
+        console.error("Error while saving the chart:", error);
+        res.status(500).send('Internal Server Error');
     }
 });
 
