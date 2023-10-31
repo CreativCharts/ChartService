@@ -1,5 +1,5 @@
 import express from 'express';
-import {createChart, allCharts} from "./controller/ChartController.js";
+import {allCharts, createChart} from "./controller/ChartController.js";
 import {initializeDatabase} from "./dbConnect/database.js";
 
 const app = express();
@@ -11,11 +11,9 @@ initializeDatabase();
 
 app.get('/dashboard', (req, res) => res.send('ChartService is up and running!'));
 
-app.get('/dashboard/allCharts', async (
-    req,
-    res) => {
+app.get('/dashboard/allCharts', async (req, res) => {  // Stellen Sie sicher, dass die Methode asynchron ist, wenn sie eine Datenbankabfrage enthält
     try {
-        const charts = await allCharts();
+        const charts = await allCharts();  // Annahme, dass `getAllCharts` asynchron ist
         res.status(200).json(charts);
     } catch (error) {
         console.error("Error fetching all charts:", error);
