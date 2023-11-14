@@ -4,65 +4,41 @@ export async function allCharts() {
     try {
         return await ChartModel.find();
     } catch (error) {
-        console.error("Error in allCharts:", error);
-        throw error;
+        throw new Error("Fehler beim Abrufen der Charts");
     }
 }
 
 export async function createChart(chart) {
-
-    console.log('Received data:', chart);  
+    
 
     const chartModel = new ChartModel(chart);
 
-    chartModel.type = chart.type || 'default-type';
-
-    chartModel.data = chart.data || {};
-
-    chartModel.gridData = chart.gridData || [];
-
     try {
         return await chartModel.save();
-
     } catch (error) {
-
-        console.error("Error in createChart:", error);
-
-        throw error;
+        
+        throw new Error("Fehler beim Speichern des Charts" + error);
     }
 }
 
 export async function updateChart(chart) {
     try {
-        const updatedChart = await ChartModel.findOneAndUpdate(
-
-            { type: chart.type },
+        return await ChartModel.findOneAndUpdate(
+            {_id: chart._id},
             chart,
-            { new: true }
+            {new: true}
         );
-
-        return updatedChart;
-
     } catch (error) {
-
-        console.error("Error in updateChart:", error);
-
-        throw error;
+        
+        throw new Error("Fehler beim Aktualisieren des Charts" + error);
     }
 }
 
-export async function deleteChart(chart) {
-
+export async function deleteChart(chartId) {
     try {
-
-        const deletedChart = await ChartModel.findOneAndDelete({ type: chart.type });
-
-        return deletedChart;
-
+        return await ChartModel.findByIdAndDelete(chartId);
     } catch (error) {
-
-        console.error("Error in deleteChart:", error);
         
-        throw error;
+        throw new Error("Fehler beim Löschen des Charts" + error);
     }
 }
