@@ -1,13 +1,16 @@
 import express from 'express';
-import {allCharts, createChart} from "./controller/chartController.js";
-import {initializeDatabase} from "./dataBase/database.js";
-import dotenv from 'dotenv';
+import {initializeDatabase, PORT} from "./dataBase/database.js";
+import {
+    fetchAll,
+    createChart,
+    fetchChartById,
+    updateChart
+} from "./controller/chartController.js";
 
-dotenv.config();
 
 const app = express();
 
-const port = process.env.PORT;
+
 
 app.use(express.json());
 
@@ -16,18 +19,17 @@ initializeDatabase()
         console.log("Database initialized"));
 
 
-
-app.get('/api', (req, res) => {
-    console.log("GET /api - Request received");
+app.get('/', (req, res) => {
+    console.log("GET /- Request received");
     res.send('ChartService is up and running!');
 });
 
 app.get('/dashboard/all-charts', async (req, res) => {
     console.log("GET /dashboard/all-charts - Request received");
     try {
-        const charts = await allCharts();
-        console.log("GET /all-charts - Sending charts", charts);
-        res.status(200).json(charts);
+        const response = await fetchAll();
+        console.log("GET /all-charts - Sending charts", response);
+        res.status(200).json(response);
     } catch (error) {
         console.error("Error fetching all charts:", error);
         res.status(500).send('Internal Server Error');
@@ -46,6 +48,32 @@ app.post('/editor/create-chart', async (req, res) => {
     }
 });
 
-app.listen(port, () => {
-    console.log(`Chart service listening on port ${port}`);
+app.get(`/editor/chart/:id`, async (
+    req,
+    res) => {
+    console.log("GET /editor/chart - Request received with id:", req.params.id);
+    try {
+        const response = await fetchChartById(
+            {id: req.params.id}
+        );
+        res.status(200).json(response);
+    } catch (error) {
+        console.error("Error fetching chart:", error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.put(`/editor/update-chart/:id`, async (req, res) => {
+    console.log("PUT /editor/update-chart - Request received with id:", req.params.id);
+    try {
+        const response = await updateChart(req.body);
+        res.status(200).json(response);
+    } catch (error) {
+        console.error("Error updating chart:", error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.listen(PORT, () => {
+    console.log(`Chart service listening on port ${PORT}`);
 });

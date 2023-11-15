@@ -15,7 +15,9 @@ const rowSchema = new mongoose.Schema({
 
 const chartSchema = new mongoose.Schema({
 
+
     type: {
+        id: Number,
         type: String,
         enum: ['bar', 'line', 'pie', 'default-type']
     },
