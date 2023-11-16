@@ -4,13 +4,11 @@ import {
     fetchAll,
     createChart,
     fetchChartById,
-    updateChart
+    updateChart,
+    deleteChart
 } from "./controller/chartController.js";
 
-
 const app = express();
-
-
 
 app.use(express.json());
 
@@ -20,7 +18,7 @@ initializeDatabase()
 
 
 app.get('/', (req, res) => {
-    console.log("GET /- Request received");
+    console.log("GET / 200 OK");
     res.send('ChartService is up and running!');
 });
 
@@ -53,12 +51,11 @@ app.get(`/editor/chart/:id`, async (
     res) => {
     console.log("GET /editor/chart - Request received with id:", req.params.id);
     try {
-        const response = await fetchChartById(
-            {id: req.params.id}
-        );
+        const response = await fetchChartById(req.params.id);
         res.status(200).json(response);
+        console.log("GET /editor/chart - Sending chart: ", response);
     } catch (error) {
-        console.error("Error fetching chart:", error);
+        console.error("Error fetching chart: ", error);
         res.status(500).send('Internal Server Error');
     }
 });
@@ -70,6 +67,17 @@ app.put(`/editor/update-chart/:id`, async (req, res) => {
         res.status(200).json(response);
     } catch (error) {
         console.error("Error updating chart:", error);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+app.delete(`/editor/delete-chart/:id`, async (req, res) => {
+    console.log("DELETE /editor/delete-chart - Request received with id:", req.params.id);
+    try {
+        const response = await deleteChart(req.params.id);
+        res.status(200).json(response);
+    } catch (error) {
+        console.error("Error deleting chart:", error);
         res.status(500).send('Internal Server Error');
     }
 });

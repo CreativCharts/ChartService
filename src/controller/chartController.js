@@ -1,4 +1,5 @@
 import ChartModel from "../models/Chart.js";
+import {ObjectId} from "mongodb";
 
 export async function fetchAll() {
     try {
@@ -9,9 +10,8 @@ export async function fetchAll() {
 }
 
 export async function createChart(chart) {
-
+    delete chart._id;
     const chartModel = new ChartModel(chart);
-
     try {
         return await chartModel.save();
     } catch (error) {
@@ -30,7 +30,7 @@ export async function fetchChartById(chartId) {
 
 export async function updateChart(chart) {
     try {
-        return await ChartModel.findByIdAndUpdate(chart.id, chart, {new: true});
+        return await ChartModel.findByIdAndUpdate(new ObjectId(chart._id), chart, {new: true});
     } catch (error) {
         throw new Error("Fehler beim Aktualisieren des Charts" + error);
     }
@@ -39,7 +39,6 @@ export async function updateChart(chart) {
 
 export async function deleteChart(chartId) {
     try {
-
         return await ChartModel.findByIdAndDelete(chartId);
     } catch (error) {
 
