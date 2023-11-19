@@ -17,24 +17,30 @@ initializeDatabase()
         console.log("Database initialized"));
 
 
-app.get('/', (req, res) => {
+app.get('/', (
+    req,
+    res) => {
     console.log("GET / 200 OK");
     res.send('ChartService is up and running!');
 });
 
-app.get('/dashboard/all', async (req, res) => {
-    console.log("GET /dashboard/all-charts - Request received");
+app.get('/dashboard/all', async (
+    req,
+    res) => {
+    const page = parseInt(req.query.page) || 1;
+    const pageSize = parseInt(req.query.pageSize) || 12;
+
     try {
-        const response = await fetchAll();
-        console.log("GET /all-charts - Sending charts", response);
+        const response = await fetchAll(page, pageSize);
         res.status(200).json(response);
     } catch (error) {
-        console.error("Error fetching all charts:", error);
         res.status(500).send('Internal Server Error');
     }
 });
 
-app.post('/editor/create', async (req, res) => {
+app.post('/editor/create', async (
+    req,
+    res) => {
     console.log("POST /api/create-chart - Request received with body:", req.body);
     try {
         const response = await createChart(req.body);
@@ -60,7 +66,9 @@ app.get(`/editor/chart/:id`, async (
     }
 });
 
-app.put(`/editor/update/:id`, async (req, res) => {
+app.put(`/editor/update/:id`, async (
+    req,
+    res) => {
     console.log("PUT /editor/update - Request received with id:", req.params.id);
     try {
         const response = await updateChart(req.body);
@@ -71,8 +79,10 @@ app.put(`/editor/update/:id`, async (req, res) => {
     }
 });
 
-app.delete(`/editor/delete/:id`, async (req, res) => {
-    console.log("DELETE /editor/delete-chart - Request received with id:", req.params.id);
+app.delete(`/dashboard/delete/:id`, async (
+    req,
+    res) => {
+    console.log("DELETE /dashboard/delete-chart - Request received with id:", req.params.id);
     try {
         const response = await deleteChart(req.params.id);
         res.status(200).json(response);

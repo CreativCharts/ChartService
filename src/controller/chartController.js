@@ -1,9 +1,21 @@
 import ChartModel from "../models/Chart.js";
 import {ObjectId} from "mongodb";
 
-export async function fetchAll() {
+export async function fetchAll(page, pageSize) {
+    const limit = pageSize;
+    const skip = (page - 1) * pageSize;
+
     try {
-        return await ChartModel.find();
+        const charts =
+            await ChartModel.find().limit(limit).skip(skip);
+        const totalCharts = await ChartModel.countDocuments();
+
+        return {
+            charts,
+            total: totalCharts,
+            page,
+            totalPages: Math.ceil(totalCharts / limit),
+        };
     } catch (error) {
         throw new Error("Fehler beim Abrufen der Charts");
     }
