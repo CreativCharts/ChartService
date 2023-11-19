@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
     res.send('ChartService is up and running!');
 });
 
-app.get('/dashboard/all-charts', async (req, res) => {
+app.get('/dashboard/all', async (req, res) => {
     console.log("GET /dashboard/all-charts - Request received");
     try {
         const response = await fetchAll();
@@ -34,7 +34,7 @@ app.get('/dashboard/all-charts', async (req, res) => {
     }
 });
 
-app.post('/editor/create-chart', async (req, res) => {
+app.post('/editor/create', async (req, res) => {
     console.log("POST /api/create-chart - Request received with body:", req.body);
     try {
         const response = await createChart(req.body);
@@ -60,8 +60,8 @@ app.get(`/editor/chart/:id`, async (
     }
 });
 
-app.put(`/editor/update-chart/:id`, async (req, res) => {
-    console.log("PUT /editor/update-chart - Request received with id:", req.params.id);
+app.put(`/editor/update/:id`, async (req, res) => {
+    console.log("PUT /editor/update - Request received with id:", req.params.id);
     try {
         const response = await updateChart(req.body);
         res.status(200).json(response);
@@ -71,7 +71,7 @@ app.put(`/editor/update-chart/:id`, async (req, res) => {
     }
 });
 
-app.delete(`/editor/delete-chart/:id`, async (req, res) => {
+app.delete(`/editor/delete/:id`, async (req, res) => {
     console.log("DELETE /editor/delete-chart - Request received with id:", req.params.id);
     try {
         const response = await deleteChart(req.params.id);

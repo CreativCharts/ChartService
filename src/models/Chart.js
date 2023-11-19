@@ -15,6 +15,8 @@ const rowSchema = new mongoose.Schema({
 
 const chartSchema = new mongoose.Schema({
 
+    title: String,
+    description: String,
 
     type: {
         type: String,
