@@ -17,10 +17,10 @@ initializeDatabase()
         console.log("Database initialized"));
 
 
-app.get('/', (
+app.get('/home', (
     req,
     res) => {
-    console.log("GET / 200 OK");
+    console.log("GET /home 200 OK");
     res.send('ChartService is up and running!');
 });
 
