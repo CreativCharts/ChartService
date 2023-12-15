@@ -32,9 +32,10 @@ export async function createChart(chart) {
     }
 }
 
-export async function fetchChartById(chartId) {
+export async function fetchChartById(chartid) {
+
     try {
-        return await ChartModel.findById(chartId);
+        return await ChartModel.findById(new ObjectId(chartid));
     } catch (error) {
         throw new Error("Fehler beim Abrufen des Charts" + error);
     }
