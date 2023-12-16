@@ -17,14 +17,14 @@ initializeDatabase()
         console.log("Database initialized"));
 
 
-app.get('/home', (
+app.get('/api/home', (
     req,
     res) => {
     console.log("GET /home 200 OK");
     res.send('ChartService is up and running!');
 });
 
-app.get('/dashboard/all', async (
+app.get('/api/dashboard/all', async (
     req,
     res) => {
     const page = parseInt(req.query.page) || 1;
@@ -38,7 +38,7 @@ app.get('/dashboard/all', async (
     }
 });
 
-app.post('/editor/create', async (
+app.post('/api/editor/create', async (
     req,
     res) => {
     console.log("POST /api/create-chart - Request received with body:", req.body);
@@ -52,7 +52,7 @@ app.post('/editor/create', async (
     }
 });
 
-app.get(`/editor/chart/:id`, async (
+app.get(`/api/editor/chart/:id`, async (
     req,
     res) => {
     console.log("GET /editor/chart - Request received with id:", req.params.id);
@@ -66,7 +66,7 @@ app.get(`/editor/chart/:id`, async (
     }
 });
 
-app.put(`/editor/update/:id`, async (
+app.put(`/api/editor/update/:id`, async (
     req,
     res) => {
     console.log("PUT /editor/update - Request received with id:", req.params.id);
@@ -79,7 +79,7 @@ app.put(`/editor/update/:id`, async (
     }
 });
 
-app.delete(`/dashboard/delete/:id`, async (
+app.delete(`/api/dashboard/delete/:id`, async (
     req,
     res) => {
     console.log("DELETE /dashboard/delete-chart - Request received with id:", req.params.id);
